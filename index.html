@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Check</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        /* Slide Container */
+        .slide {
+            display: none;
+            position: relative;
+            width: 100%;
+            max-width: 900px; /* Keeps it crisp on desktop and fits mobile */
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .slide img.bg {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        /* Invisible Clickable Hotspots */
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            /* Uncomment the line below if you ever want to see the red boxes to adjust them */
+            /* background: rgba(255, 0, 0, 0.35); */
+        }
+
+        /* --- SLIDE 2: "CLICK" BANNER COORDINATES --- */
+        .click-banner {
+            top: 9%;
+            left: 30%;
+            width: 37%;
+            height: 15%;
+        }
+
+        /* --- SLIDE 3: 4 EXPRESSION FACES COORDINATES --- */
+        .mood-btn {
+            top: 34%;
+            width: 8.5%;
+            height: 14%;
+        }
+        .mood-1 { left: 9%; }     /* Happy / Excited face */
+        .mood-2 { left: 18.5%; }  /* Hearts / Loving face */
+        .mood-3 { left: 28.5%; }  /* Crying / Sad face */
+        .mood-4 { left: 38%; }    /* Done / Neutral face */
+
+        /* --- SLIDE 4: AIRDROP PHOTO WINDOW --- */
+        .airdrop-photo {
+            position: absolute;
+            top: 32.8%;
+            left: 34.4%;
+            width: 24.3%;
+            height: 39%;
+            object-fit: cover; /* Makes your photo fill the Airdrop box cleanly */
+            z-index: 1;
+        }
+
+        /* Small subtle back button on Slide 4 so he can check other moods */
+        .back-btn {
+            position: absolute;
+            bottom: 15%;
+            left: 34.4%;
+            width: 12%;
+            height: 8%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: Feathers McGraw (Click anywhere on the slide to continue) -->
+    <div id="slide1" class="slide active" onclick="goToSlide(2)" style="cursor: pointer;">
+        <img src="slide1.jpg" class="bg" alt="Slide 1">
+    </div>
+
+    <!-- SLIDE 2: Click Banner -->
+    <div id="slide2" class="slide">
+        <img src="slide2.jpg" class="bg" alt="Slide 2">
+        <!-- Clicking the "Click" banner goes to Slide 3 -->
+        <div class="hotspot click-banner" onclick="goToSlide(3)"></div>
+    </div>
+
+    <!-- SLIDE 3: Mood Check (4 Expressions) -->
+    <div id="slide3" class="slide">
+        <img src="slide3.jpg" class="bg" alt="Slide 3">
+        <!-- Each face loads a different image into Slide 4 -->
+        <div class="hotspot mood-btn mood-1" onclick="showAirdrop('photo1.jpg')"></div>
+        <div class="hotspot mood-btn mood-2" onclick="showAirdrop('photo2.jpg')"></div>
+        <div class="hotspot mood-btn mood-3" onclick="showAirdrop('photo3.jpg')"></div>
+        <div class="hotspot mood-btn mood-4" onclick="showAirdrop('photo4.jpg')"></div>
+    </div>
+
+    <!-- SLIDE 4: Airdrop Result -->
+    <div id="slide4" class="slide">
+        <img src="slide4.png" class="bg" alt="Slide 4">
+        <!-- The dynamic photo that changes based on his reaction -->
+        <img id="result-pic" class="airdrop-photo" src="" alt="Reaction Photo">
+        <!-- Clicking "Decline" takes him back to pick another mood if he wants -->
+        <div class="back-btn" onclick="goToSlide(3)" title="Pick another mood"></div>
+    </div>
+
+    <script>
+        function goToSlide(slideNumber) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById('slide' + slideNumber).classList.add('active');
+        }
+
+        function showAirdrop(photoFile) {
+            document.getElementById('result-pic').src = photoFile;
+            goToSlide(4);
+        }
+    </script>
+
+</body>
+</html>
